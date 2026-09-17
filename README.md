@@ -1,35 +1,4 @@
 
-## 1. Bối cảnh bài toán
-
-Trong hệ thống Microservice, **Order-Service** cần gọi sang hệ thống của đơn vị vận chuyển **GHTK** để tạo vận đơn.
-
-Hệ thống GHTK có đặc thù là thường xuyên xảy ra tình trạng **mạng chập chờn (Network Glitch)**. Thỉnh thoảng một request gọi sang GHTK có thể bị **Timeout**, nhưng nếu thực hiện request lại ngay sau đó thì request có thể thành công.
-
-Đây là dạng lỗi **Transient Failure**, tức là lỗi xảy ra tạm thời và có khả năng tự biến mất sau một khoảng thời gian ngắn.
-
-Ví dụ:
-
-```text
-Order-Service
-     |
-     |--- Request 1 ---> GHTK
-     |                    |
-     |                  Timeout
-     |
-     |--- Request 2 ---> GHTK
-     |                    |
-     |                  Success
-```
-
-Với tình huống này, System Architect cần lựa chọn cơ chế phù hợp để bảo vệ Order-Service và tăng khả năng xử lý thành công request.
-
-Hai giải pháp được xem xét là:
-
-1. **Circuit Breaker**
-2. **Retry Pattern kết hợp Exponential Backoff**
-
----
-
 # PHẦN 1 – ĐỀ XUẤT ĐA GIẢI PHÁP
 
 ## 2. Giải pháp 1: Dùng Circuit Breaker thuần túy
